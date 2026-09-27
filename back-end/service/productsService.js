@@ -7,7 +7,7 @@ const createProducts = async ({
   price,
   stock,
   imageUrl,
-  categoryId
+  categoryId,
 }) => {
   const product = await prisma.product.create({
     data: {
@@ -16,7 +16,7 @@ const createProducts = async ({
       price,
       stock,
       imageUrl,
-      categoryId
+      categoryId,
     },
   });
 
@@ -32,7 +32,7 @@ const listProducts = async () => {
       description: true,
       price: true,
       imageUrl: true,
-      categoryId: true
+      categoryId: true,
     },
   });
 
@@ -51,15 +51,15 @@ const getProduct = async (id) => {
 };
 
 //editar produto
-const updateProduct = async (
+const updateProduct = async ({
   name,
   description,
   price,
   stock,
   imageUrl,
   id,
-  categoryId
-) => {
+  categoryId,
+}) => {
   const produtoExistente = await prisma.product.findUnique({
     where: {
       id,

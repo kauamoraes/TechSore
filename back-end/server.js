@@ -70,6 +70,29 @@ app.get("/categories", async (req, res) => {
   return res.status(200).json({ message: "Categorias encontradas", listCategories })
 })
 
+//deletar categoria
+app.delete("/categories/:id", async(req, res) => {
+  const { id } = req.params;
+
+  const exixtingCategorie = await prisma.category.findUnique({
+    where: {
+      id
+    }
+  })
+
+  if(!exixtingCategorie){
+    return res.status(404).json({ message: "Categoria não encontrada" })
+  }
+
+  const categorie = await prisma.category.delete({
+    where: {
+      id
+    }
+  })
+
+  return res.status(200).json({ message: "Categoria apaga com sucesso", categorie })
+})
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
