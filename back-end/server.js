@@ -6,6 +6,7 @@ const adminMiddleware = require("./middleware/adminMiddleware");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 const ProductsRoutes = require("./routes/productsRoutes.js")
+const categoriesRoutes = require("./routes/categoriesRoutes.js")
 
 const app = express();
 const port = 3000;
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(userRoutes);
 app.use(authRoutes);
 app.use(ProductsRoutes);
+app.use(categoriesRoutes)
 
 //rota teste de middleware
 app.get("/profile", authenticateToken, adminMiddleware, async (req, res) => {
@@ -40,58 +42,6 @@ app.get("/profile", authenticateToken, adminMiddleware, async (req, res) => {
 
   res.status(200).json(user);
 });
-
-//criar categorias
-app.post("/categories", async (req, res) => {
-  const { name } = req.body
-
-  if(!name){
-    return res.status(400).json({ message: "A categoria não pode ser vazia" })
-  }
-
-  const categoria = await prisma.category.create({
-    data: {
-      name
-    }
-  })
-
-  res.status(201).json({ message: "categoria criada com sucesso", categoria })
-})
-
-//listar categorias
-app.get("/categories", async (req, res) => {
-  const listCategories = await prisma.category.findMany({
-    select: {
-      id: true,
-      name: true
-    }
-  })
-
-  return res.status(200).json({ message: "Categorias encontradas", listCategories })
-})
-
-//deletar categoria
-app.delete("/categories/:id", async(req, res) => {
-  const { id } = req.params;
-
-  const exixtingCategorie = await prisma.category.findUnique({
-    where: {
-      id
-    }
-  })
-
-  if(!exixtingCategorie){
-    return res.status(404).json({ message: "Categoria não encontrada" })
-  }
-
-  const categorie = await prisma.category.delete({
-    where: {
-      id
-    }
-  })
-
-  return res.status(200).json({ message: "Categoria apaga com sucesso", categorie })
-})
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
