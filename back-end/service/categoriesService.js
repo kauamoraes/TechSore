@@ -12,7 +12,7 @@ const createCategories = async ({ name }) => {
     },
   });
 
-  return categoria
+  return categoria;
 };
 
 //lista categorias
@@ -45,7 +45,7 @@ const deleteCategories = async ({ id }) => {
     },
   });
 
-  return categorie
+  return categorie;
 };
 
 module.exports = { createCategories, listCategories, deleteCategories };
